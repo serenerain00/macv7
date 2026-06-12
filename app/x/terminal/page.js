@@ -197,11 +197,25 @@ export default function Terminal() {
         print([line("melissa is already root on this portfolio.", "text-red-400")]);
         break;
 
-      default:
-        print([
-          line(`command not found: ${name}`, "text-red-400"),
-          line('  type "help" for the menu', "text-white/40"),
-        ]);
+      default: {
+        // Bare project names ("arti-wall", "horizon"), and list numbers
+        // ("01", "3") should just open the project — users type what they see
+        const bare = [name, ...args].join("-");
+        const byNumber = /^\d+$/.test(name) ? projects[parseInt(name, 10) - 1] : null;
+        const project =
+          projects.find(
+            (x) => x.slug === bare || (name.length > 1 && x.slug.includes(name))
+          ) || byNumber;
+        if (project) {
+          print([line(`Opening ${project.title}…`, "text-accent-glow")]);
+          setTimeout(() => router.push(`/work/${project.slug}`), 500);
+        } else {
+          print([
+            line(`command not found: ${name}`, "text-red-400"),
+            line('  type "help" for the menu', "text-white/40"),
+          ]);
+        }
+      }
     }
   };
 
