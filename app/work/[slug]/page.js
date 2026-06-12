@@ -100,6 +100,29 @@ export default function ProjectPage({ params }) {
             </Reveal>
           ))}
 
+          {/* SPOTLIGHT */}
+          {project.spotlight && (
+            <Reveal>
+              <section
+                className="relative overflow-hidden rounded-2xl border border-white/10 bg-ink-900 p-8 md:p-10"
+              >
+                <span
+                  className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full blur-[80px]"
+                  style={{ background: `${project.accent}30` }}
+                />
+                <h2 className="font-mono text-xs uppercase tracking-[0.2em]" style={{ color: project.accent }}>
+                  {project.spotlight.label}
+                </h2>
+                <p className="mt-4 text-2xl font-medium tracking-tight text-white md:text-3xl">
+                  {project.spotlight.title}
+                </p>
+                <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/65">
+                  {project.spotlight.body}
+                </p>
+              </section>
+            </Reveal>
+          )}
+
           {/* HOW I BUILT IT */}
           <Reveal>
             <section>
@@ -174,8 +197,32 @@ export default function ProjectPage({ params }) {
               <p className="mt-5 text-balance text-2xl font-medium leading-snug text-white md:text-3xl">
                 {project.changed}
               </p>
+              {project.outcomes?.length > 0 && (
+                <ul className="mt-7 grid gap-2.5 sm:grid-cols-2">
+                  {project.outcomes.map((o) => (
+                    <li key={o} className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70">
+                      <span
+                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ background: project.accent }}
+                      />
+                      {o}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </section>
           </Reveal>
+
+          {/* TAKEAWAY */}
+          {project.takeaway && (
+            <Reveal>
+              <blockquote className="border-l-2 pl-6 md:pl-8" style={{ borderColor: project.accent }}>
+                <p className="text-balance text-xl font-light italic leading-relaxed text-white/75 md:text-2xl">
+                  {project.takeaway}
+                </p>
+              </blockquote>
+            </Reveal>
+          )}
         </div>
 
         {/* SIDEBAR */}

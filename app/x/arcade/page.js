@@ -304,7 +304,7 @@ export default function Arcade() {
           <h2 className="text-center font-mono text-2xl font-bold tracking-tight text-white md:text-3xl">
             BONUS STAGE: <span className="text-accent-glow">SIDE QUESTS</span>
           </h2>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {experiments.map((x, i) => (
               <div
                 key={x.title}
