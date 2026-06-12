@@ -7,3 +7,7 @@
 .env*.local
 .vercel
 npm-debug.log*
+
+# raw asset archives from the old portfolio (curated copies live in /public)
+/assets-from-v6
+/videos-from-v6

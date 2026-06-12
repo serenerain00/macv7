@@ -1,189 +1,199 @@
-import Link from "next/link";
-import Hero from "@/components/Hero";
-import Reveal from "@/components/Reveal";
-import SectionHeader from "@/components/SectionHeader";
-import ProjectCard from "@/components/ProjectCard";
-import { projects, experiments, tools } from "@/lib/projects";
+"use client";
 
-const principles = [
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import gsap from "gsap";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+
+gsap.registerPlugin(ScrambleTextPlugin);
+
+const variants = [
   {
-    n: "01",
-    title: "I build the slides instead of presenting them",
-    body: "Most teams explain ideas with decks. I'd rather hand you the thing and let you use it.",
+    key: "1",
+    href: "/x/cinematic",
+    name: "CINEMATIC",
+    sub: "Scroll-driven scenes. A film about the work.",
+    accent: "#7c5cff",
+    mode: "01 / SCROLL",
   },
   {
-    n: "02",
-    title: "Working software beats static mockups",
-    body: "A prototype you can touch removes more uncertainty than any pixel-perfect comp ever will.",
+    key: "2",
+    href: "/x/arcade",
+    name: "ARCADE",
+    sub: "XP, levels, achievements. The portfolio as a game.",
+    accent: "#43e5b0",
+    mode: "02 / PLAY",
   },
   {
-    n: "03",
-    title: "AI is an accelerator, not a feature",
-    body: "I use AI to compress the distance between an idea and a real, testable experience.",
-  },
-  {
-    n: "04",
-    title: "The future is easier to understand when you can interact with it",
-    body: "Stakeholders align faster on something they can see, test, and react to.",
+    key: "3",
+    href: "/x/terminal",
+    name: "TERMINAL",
+    sub: "A command line into everything I've built.",
+    accent: "#ff7a59",
+    mode: "03 / TYPE",
   },
 ];
 
-export default function Home() {
+export default function Launcher() {
+  const router = useRouter();
+  const rootRef = useRef(null);
+  const counterRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+
+  // Preloader: count 0→100, then unveil the chooser
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const state = { n: 0 };
+      const tl = gsap.timeline({
+        onComplete: () => setLoaded(true),
+      });
+      tl.to(state, {
+        n: 100,
+        duration: 1.6,
+        ease: "power2.inOut",
+        onUpdate: () => {
+          if (counterRef.current)
+            counterRef.current.textContent = String(Math.round(state.n)).padStart(3, "0");
+        },
+      })
+        .to(".pre-bar", { scaleX: 1, duration: 1.6, ease: "power2.inOut" }, 0)
+        .to(".preloader", {
+          yPercent: -100,
+          duration: 0.9,
+          ease: "power4.inOut",
+        })
+        .from(
+          ".panel",
+          {
+            yPercent: 100,
+            stagger: 0.09,
+            duration: 1,
+            ease: "power4.out",
+          },
+          "-=0.45"
+        )
+        .from(
+          ".launcher-head > *",
+          { y: 24, opacity: 0, stagger: 0.08, duration: 0.7, ease: "power3.out" },
+          "-=0.6"
+        );
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
+
+  // Keyboard shortcuts 1/2/3
+  useEffect(() => {
+    const onKey = (e) => {
+      const v = variants.find((x) => x.key === e.key);
+      if (v) exit(v.href);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const exit = (href) => {
+    gsap.to(".panel", {
+      yPercent: 100,
+      stagger: 0.06,
+      duration: 0.55,
+      ease: "power3.in",
+      onComplete: () => router.push(href),
+    });
+    gsap.to(".launcher-head", { opacity: 0, y: -16, duration: 0.4 });
+  };
+
+  const scramble = (e, name) => {
+    const el = e.currentTarget.querySelector(".panel-name");
+    gsap.to(el, {
+      duration: 0.7,
+      scrambleText: { text: name, chars: "█▓▒░<>/_", speed: 1.2 },
+    });
+  };
+
   return (
-    <>
-      <Hero />
-
-      {/* PRINCIPLES / POSITIONING */}
-      <section className="relative border-t border-white/5 py-24 md:py-32">
-        <div className="container-content">
-          <SectionHeader
-            eyebrow="How I work"
-            title="Traditional portfolios explain the work. This one demonstrates it."
-            intro="I'm not here to show wireframes, personas, and process diagrams. I reduce uncertainty by building realistic experiences people can actually use."
-          />
-
-          <div className="mt-16 grid gap-4 md:grid-cols-2">
-            {principles.map((p, i) => (
-              <Reveal key={p.n} delay={(i % 2) * 0.08}>
-                <div className="card h-full p-7 md:p-8">
-                  <span className="font-mono text-sm text-accent-glow/70">
-                    {p.n}
-                  </span>
-                  <h3 className="mt-4 text-xl font-medium tracking-tight text-white">
-                    {p.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-white/55">
-                    {p.body}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+    <div ref={rootRef} className="fixed inset-0 overflow-hidden bg-ink-950">
+      {/* PRELOADER */}
+      <div className="preloader fixed inset-0 z-50 flex flex-col items-center justify-center bg-ink-950">
+        <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/40">
+          Melissa Casole · Creative Technologist
+        </p>
+        <p
+          ref={counterRef}
+          className="mt-6 font-mono text-7xl font-bold tracking-tighter text-white"
+        >
+          000
+        </p>
+        <div className="mt-8 h-px w-56 overflow-hidden bg-white/10">
+          <div className="pre-bar h-full w-full origin-left scale-x-0 bg-accent" />
         </div>
-      </section>
+      </div>
 
-      {/* FEATURED WORK */}
-      <section className="relative py-24 md:py-32">
-        <div className="container-content">
-          <SectionHeader
-            id="work"
-            eyebrow="Featured Work"
-            title="Flagship projects, built end-to-end."
-            intro="Each one followed the same arc: a problem, something I built, how I built it, and what changed because it existed."
-          />
-
-          <div className="mt-16 grid gap-5 md:grid-cols-2">
-            {projects.map((p, i) => (
-              <ProjectCard key={p.slug} project={p} i={i} />
-            ))}
-          </div>
+      {/* HEAD */}
+      <div className="launcher-head pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-between p-6 md:p-10">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/45">
+            Melissa Casole
+          </p>
+          <h1 className="mt-2 text-2xl font-medium tracking-tight text-white md:text-3xl">
+            Choose your experience.
+          </h1>
         </div>
-      </section>
-
-      {/* BUILDING THE FUTURE */}
-      <section className="relative border-t border-white/5 py-24 md:py-32">
-        <div className="container-content">
-          <SectionHeader
-            id="building"
-            eyebrow="Building the Future"
-            title="Continuous experimentation, not a frozen portfolio."
-            intro="Smaller tools and probes I build to test where emerging technology actually changes product work."
-          />
-
-          <div className="mt-16 grid gap-4 sm:grid-cols-2">
-            {experiments.map((e, i) => (
-              <Reveal key={e.title} delay={(i % 2) * 0.08}>
-                <div className="group card flex items-start gap-5 p-7">
-                  <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] font-mono text-sm text-accent-glow/80 transition-colors group-hover:border-accent/40">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h3 className="text-lg font-medium tracking-tight text-white">
-                      {e.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/55">
-                      {e.blurb}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+        <div className="pointer-events-auto flex items-center gap-5 font-mono text-xs">
+          <a
+            href="/resume"
+            className="uppercase tracking-[0.2em] text-white/50 transition-colors hover:text-white"
+          >
+            Resume ↗
+          </a>
+          <p className="hidden text-white/35 md:block">[1] [2] [3] — or click</p>
         </div>
-      </section>
+      </div>
 
-      {/* AI & TECHNOLOGY */}
-      <section className="relative py-24 md:py-32">
-        <div className="container-content">
-          <SectionHeader
-            id="stack"
-            eyebrow="AI & Technology"
-            title="Not logos. Not buzzwords. Actual usage."
-            intro="The tools I reach for — and what each one actually does in the work."
-          />
+      {/* PANELS */}
+      <div className="flex h-full w-full flex-col md:flex-row">
+        {variants.map((v) => (
+          <button
+            key={v.key}
+            onClick={() => exit(v.href)}
+            onMouseEnter={(e) => scramble(e, v.name)}
+            data-cursor="ENTER"
+            className="panel group relative flex flex-1 items-end overflow-hidden border-white/10 text-left transition-[flex-grow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:flex-[1.7] max-md:border-b md:border-r md:last:border-r-0"
+            style={{ background: "#0a0c10" }}
+          >
+            <div
+              className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+              style={{
+                background: `radial-gradient(120% 90% at 50% 110%, ${v.accent}33, transparent 65%)`,
+              }}
+            />
+            <div className="absolute inset-0 bg-grid-faint bg-[size:48px_48px] opacity-30" />
 
-          <div className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/5 sm:grid-cols-2 lg:grid-cols-3">
-            {tools.map((t, i) => (
-              <Reveal key={t.name} delay={(i % 3) * 0.06}>
-                <div className="group h-full bg-ink-900 p-7 transition-colors duration-300 hover:bg-ink-850">
-                  <div className="flex items-center gap-2.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent transition-all duration-300 group-hover:shadow-[0_0_12px_2px_rgba(124,92,255,0.6)]" />
-                    <h3 className="font-mono text-sm tracking-tight text-white">
-                      {t.name}
-                    </h3>
-                  </div>
-                  <p className="mt-3 text-sm leading-relaxed text-white/50">
-                    {t.use}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+            <span className="absolute right-5 top-20 font-mono text-[11px] tracking-[0.25em] text-white/30 md:top-8">
+              {v.mode}
+            </span>
 
-      {/* CONTACT */}
-      <section
-        id="contact"
-        className="relative scroll-mt-20 overflow-hidden py-28 md:py-40"
-      >
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/15 blur-[150px]" />
-        <div className="pointer-events-none absolute inset-0 bg-grid-faint bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
-
-        <div className="container-content relative text-center">
-          <Reveal>
-            <p className="eyebrow justify-center">Let&apos;s build something</p>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h2 className="mx-auto mt-6 max-w-3xl text-balance text-4xl font-medium tracking-[-0.02em] text-white md:text-6xl">
-              If your team is trying to figure out the future —
-              <span className="bg-gradient-to-r from-accent-soft to-signal bg-clip-text text-transparent">
-                {" "}
-                I&apos;m already building it.
-              </span>
-            </h2>
-          </Reveal>
-          <Reveal delay={0.16}>
-            <p className="mx-auto mt-6 max-w-xl text-lg text-white/55">
-              Open to Creative Technologist, AI Product Design, and Principal
-              Product Design roles.
-            </p>
-          </Reveal>
-          <Reveal delay={0.24}>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href="mailto:melissa.casole@yahoo.com"
-                className="btn-primary"
-              >
-                Get in touch
-              </a>
-              <Link href="/#work" className="btn-ghost">
-                See the work
-              </Link>
+            <div className="relative z-10 p-6 pb-10 md:p-10">
+              <span
+                className="mb-4 block h-1 w-10 rounded-full transition-all duration-500 group-hover:w-20"
+                style={{ background: v.accent }}
+              />
+              <h2 className="panel-name text-4xl font-bold tracking-tighter text-white md:text-6xl">
+                {v.name}
+              </h2>
+              <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/50 opacity-0 transition-all duration-500 group-hover:opacity-100">
+                {v.sub}
+              </p>
             </div>
-          </Reveal>
-        </div>
-      </section>
-    </>
+          </button>
+        ))}
+      </div>
+
+      {loaded && (
+        <p className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.25em] text-white/25">
+          Same work. Three ways in.
+        </p>
+      )}
+    </div>
   );
 }

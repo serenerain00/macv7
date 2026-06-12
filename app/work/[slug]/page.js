@@ -41,10 +41,10 @@ export default function ProjectPage({ params }) {
         <div className="container-content relative py-20 md:py-28">
           <Reveal>
             <Link
-              href="/#work"
+              href="/"
               className="inline-flex items-center gap-2 font-mono text-xs text-white/45 transition-colors hover:text-white"
             >
-              ← All work
+              ← Melissa Casole
             </Link>
           </Reveal>
 
@@ -126,6 +126,39 @@ export default function ProjectPage({ params }) {
               </ol>
             </section>
           </Reveal>
+
+          {/* LIVE DEMOS */}
+          {project.media?.length > 0 && (
+            <Reveal>
+              <section>
+                <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-white/40">
+                  See it, don&apos;t read it
+                </h2>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  {project.media.map((m) => (
+                    <figure
+                      key={m.src}
+                      className="overflow-hidden rounded-xl border border-white/10 bg-ink-900"
+                    >
+                      <video
+                        src={m.src}
+                        poster={m.poster}
+                        controls
+                        muted
+                        loop
+                        playsInline
+                        preload="none"
+                        className="aspect-video w-full object-cover"
+                      />
+                      <figcaption className="px-4 py-3 font-mono text-xs text-white/50">
+                        {m.caption}
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
+              </section>
+            </Reveal>
+          )}
 
           {/* WHAT CHANGED */}
           <Reveal>

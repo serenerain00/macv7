@@ -1,7 +1,6 @@
 import "./globals.css";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
+import Cursor from "@/components/v2/Cursor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,6 +22,14 @@ export const metadata = {
   },
   description:
     "When ideas are difficult to explain, I build them. Creative Technologist and Product Designer leveraging AI, code, design systems, and cognitive psychology to turn emerging concepts into tangible product experiences.",
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Melissa Casole — Creative Technologist",
     description:
@@ -30,11 +37,6 @@ export const metadata = {
     url: "https://www.melissacasole.com",
     siteName: "Melissa Casole",
     type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Melissa Casole — Creative Technologist",
-    description: "When ideas are difficult to explain, I build them.",
   },
 };
 
@@ -46,9 +48,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${mono.variable}`}>
       <body className="font-sans antialiased">
-        <Nav />
-        <main>{children}</main>
-        <Footer />
+        <Cursor />
+        {children}
       </body>
     </html>
   );
