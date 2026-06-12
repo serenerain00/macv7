@@ -9,35 +9,38 @@ gsap.registerPlugin(Draggable, InertiaPlugin);
 
 // Keep RADIUS well under the perspective distance or near-side tiles
 // blow up into the camera (giant + blurry)
-const RING = 12; // tiles per ring
 const RADIUS = 430; // px from viewer to wall
 const PERSPECTIVE = 1600; // px camera distance
 const TILE_W = 240;
-const TILE_H = 140;
+const TILE_H = 150;
+const ROW_GAP = 96; // vertical offset of each strip from center
 
 export default function VideoWall({ media, accent = "#7c5cff", title = "Inside the work" }) {
   const viewportRef = useRef(null);
   const worldRef = useRef(null);
   const [active, setActive] = useState(null);
   const activeRef = useRef(null);
-  const stateRef = useRef({ yaw: 0, pitch: -6, drift: 0, dragging: false });
+  const stateRef = useRef({ yaw: 0, pitch: -3, drift: 0, dragging: false });
   const downRef = useRef({ x: 0, y: 0 });
 
   activeRef.current = active;
 
-  // Repeat media around the ring(s); two tilted rings ≈ inside of a sphere
-  const rows =
-    media.length > 2
-      ? [
-          { tilt: -16, offset: 0 },
-          { tilt: 14, offset: 360 / RING / 2 },
-        ]
-      : [{ tilt: -2, offset: 0 }];
+  // Horizontal film strips wrapping a cylinder: one band for small sets,
+  // two stacked bands (offset half a step) for larger ones. Tile count per
+  // band keeps a visible gap between frames (ring chord > tile width).
+  const twoRows = media.length > 3;
+  const RING = twoRows ? 10 : 8;
+  const rows = twoRows
+    ? [
+        { y: -ROW_GAP, offset: 0 },
+        { y: ROW_GAP, offset: 360 / RING / 2 },
+      ]
+    : [{ y: 0, offset: 0 }];
   const tiles = rows.flatMap((row, r) =>
     Array.from({ length: RING }, (_, i) => ({
       ...media[(i + r * 3) % media.length],
       angle: (360 / RING) * i + row.offset,
-      tilt: row.tilt,
+      y: row.y,
       key: `${r}-${i}`,
     }))
   );
@@ -57,7 +60,7 @@ export default function VideoWall({ media, accent = "#7c5cff", title = "Inside t
     const proxy = document.createElement("div");
     const update = function () {
       st.yaw = this.x * 0.22;
-      st.pitch = gsap.utils.clamp(-34, 16, -6 - this.y * 0.12);
+      st.pitch = gsap.utils.clamp(-12, 8, -3 - this.y * 0.06);
       render();
     };
     const drag = Draggable.create(proxy, {
@@ -147,30 +150,35 @@ export default function VideoWall({ media, accent = "#7c5cff", title = "Inside t
               onClick={(e) => onTileClick(e, t)}
               onMouseEnter={hoverPlay}
               onMouseLeave={hoverPause}
-              className="group absolute overflow-hidden rounded-lg border border-white/15 bg-ink-900 shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-colors duration-300 hover:border-white/40"
+              className="group absolute"
               style={{
                 width: TILE_W,
                 height: TILE_H,
                 marginLeft: -TILE_W / 2,
                 marginTop: -TILE_H / 2,
-                transform: `rotateY(${t.angle}deg) rotateX(${t.tilt}deg) translateZ(-${RADIUS}px) rotateY(180deg)`,
+                transform: `rotateY(${t.angle}deg) translate3d(0, ${t.y}px, -${RADIUS}px) rotateY(180deg)`,
                 backfaceVisibility: "hidden",
               }}
             >
-              <video
-                src={t.src}
-                poster={t.poster}
-                muted
-                loop
-                playsInline
-                preload="none"
-                className="pointer-events-none h-full w-full object-cover opacity-80 transition-opacity duration-300 group-hover:opacity-100"
-              />
-              <span
-                className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/85 to-transparent px-3 pb-2 pt-6 font-mono text-[10px] uppercase tracking-widest text-white/75"
-              >
-                {t.caption}
-                <span style={{ color: accent }}>▶</span>
+              {/* filmstrip frame: sprockets top + bottom */}
+              <span className="flex h-full w-full flex-col overflow-hidden rounded-md border border-white/12 bg-black shadow-[0_0_24px_rgba(0,0,0,0.55)] transition-all duration-300 group-hover:scale-[1.06] group-hover:border-white/45 group-hover:shadow-[0_0_36px_rgba(124,92,255,0.3)]">
+                <span className="h-[13px] w-full shrink-0 bg-[repeating-linear-gradient(90deg,transparent_0_7px,rgba(255,255,255,0.22)_7px_15px,transparent_15px_22px)]" />
+                <span className="relative block flex-1 overflow-hidden">
+                  <video
+                    src={t.src}
+                    poster={t.poster}
+                    muted
+                    loop
+                    playsInline
+                    preload="none"
+                    className="pointer-events-none h-full w-full object-cover opacity-85 transition-opacity duration-300 group-hover:opacity-100"
+                  />
+                  <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/90 to-transparent px-2.5 pb-1.5 pt-5 font-mono text-[9px] uppercase tracking-widest text-white/75">
+                    {t.caption}
+                    <span style={{ color: accent }}>▶</span>
+                  </span>
+                </span>
+                <span className="h-[13px] w-full shrink-0 bg-[repeating-linear-gradient(90deg,transparent_0_7px,rgba(255,255,255,0.22)_7px_15px,transparent_15px_22px)]" />
               </span>
             </button>
           ))}
