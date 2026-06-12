@@ -28,11 +28,15 @@ export default function Cinematic() {
 
   useEffect(() => {
     let ctx;
+    let cancelled = false;
     // SplitText measures glyphs — wait for webfonts or lines break wrong
     document.fonts.ready.then(() => {
+      if (cancelled) return;
       ctx = gsap.context(() => {
         /* ---------- HERO ---------- */
-        const split = new SplitText(".hero-line", { type: "chars,lines" });
+        // Only split the solid-color lines: SplitText chars can't inherit a
+        // bg-clip-text gradient, so the gradient line animates as one block.
+        const split = new SplitText(".hero-line-split", { type: "chars,lines" });
         gsap.set(".hero-line", { opacity: 1 });
         gsap.from(split.chars, {
           yPercent: 120,
@@ -42,6 +46,20 @@ export default function Cinematic() {
           duration: 1.1,
           ease: "power4.out",
           delay: 0.25,
+        });
+        gsap.from(".hero-line-final", {
+          yPercent: 110,
+          opacity: 0,
+          duration: 1.1,
+          delay: 0.75,
+          ease: "power4.out",
+        });
+        // Ambient OR video: fade in late so it reads as intentional texture
+        gsap.to(".hero-video", {
+          opacity: 0.09,
+          duration: 2.4,
+          delay: 1.6,
+          ease: "power2.inOut",
         });
         gsap.to(".hero-eyebrow", {
           duration: 1.4,
@@ -183,7 +201,10 @@ export default function Cinematic() {
         });
       }, rootRef);
     });
-    return () => ctx?.revert();
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
   }, []);
 
   return (
@@ -213,7 +234,7 @@ export default function Cinematic() {
             muted
             loop
             playsInline
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.13] [mask-image:radial-gradient(ellipse_at_center,black,transparent_78%)]"
+            className="hero-video pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 [mask-image:radial-gradient(ellipse_at_center,black,transparent_78%)]"
           />
           <div className="pointer-events-none absolute inset-0 bg-grid-faint bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_72%)]" />
           <div className="pointer-events-none absolute -top-32 left-1/2 h-[560px] w-[820px] -translate-x-1/2 rounded-full bg-accent/20 blur-[150px] animate-pulse-slow" />
@@ -223,9 +244,9 @@ export default function Cinematic() {
               ...
             </p>
             <h1 className="mt-8 text-[clamp(2.8rem,8.5vw,7.5rem)] font-medium leading-[0.95] tracking-[-0.04em]" style={{ perspective: "800px" }}>
-              <span className="hero-line block opacity-0">When ideas are</span>
-              <span className="hero-line block opacity-0">difficult to explain,</span>
-              <span className="hero-line block bg-gradient-to-r from-accent-soft via-accent-glow to-signal bg-clip-text text-transparent opacity-0">
+              <span className="hero-line hero-line-split block opacity-0">When ideas are</span>
+              <span className="hero-line hero-line-split block opacity-0">difficult to explain,</span>
+              <span className="hero-line hero-line-final block bg-gradient-to-r from-accent-soft via-accent-glow to-signal bg-clip-text text-transparent opacity-0">
                 I build them.
               </span>
             </h1>
