@@ -341,14 +341,22 @@ export default function Cinematic() {
 
             {/* outro panel */}
             <div className="flex h-full w-[60vw] shrink-0 items-center justify-center border-l border-white/10 md:w-[40vw]">
-              <Link href="/#contact" data-cursor="GO" className="text-center">
+              <button
+                onClick={() =>
+                  document
+                    .getElementById("cine-contact")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+                data-cursor="GO"
+                className="text-center"
+              >
                 <p className="font-mono text-xs uppercase tracking-[0.25em] text-white/40">
                   And next…
                 </p>
                 <p className="mt-4 text-4xl font-medium tracking-tight text-white md:text-5xl">
                   your idea.
                 </p>
-              </Link>
+              </button>
             </div>
           </div>
         </section>
@@ -425,7 +433,10 @@ export default function Cinematic() {
         </section>
 
         {/* CONTACT */}
-        <section className="magnet-zone relative flex min-h-[90svh] flex-col items-center justify-center overflow-hidden text-center">
+        <section
+          id="cine-contact"
+          className="magnet-zone relative flex min-h-[90svh] flex-col items-center justify-center overflow-hidden text-center"
+        >
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/15 blur-[140px]" />
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-white/40">
             Roll credits

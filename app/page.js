@@ -81,8 +81,9 @@ export default function Launcher() {
     return () => ctx.revert();
   }, []);
 
-  // Keyboard shortcuts 1/2/3
+  // Keyboard shortcuts 1/2/3 — armed only once the preloader is done
   useEffect(() => {
+    if (!loaded) return;
     const onKey = (e) => {
       const v = variants.find((x) => x.key === e.key);
       if (v) exit(v.href);
@@ -90,7 +91,7 @@ export default function Launcher() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loaded]);
 
   const exit = (href) => {
     gsap.to(".panel", {

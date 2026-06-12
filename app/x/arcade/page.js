@@ -35,14 +35,15 @@ export default function Arcade() {
   const level = Math.min(99, Math.floor(xp / 250) + 1);
   const levelPct = ((xp % 250) / 250) * 100;
 
+  const unlockedRef = useRef(new Set());
   const award = useCallback((points, achievementKey) => {
     setXp((v) => v + points);
-    if (achievementKey) {
-      setUnlocked((u) => {
-        if (u.includes(achievementKey)) return u;
-        setToast(ACHIEVEMENTS[achievementKey]);
-        return [...u, achievementKey];
-      });
+    // Track unlocks in a ref so the toast side-effect stays out of the
+    // state updater (React updaters must be pure; StrictMode runs them twice)
+    if (achievementKey && !unlockedRef.current.has(achievementKey)) {
+      unlockedRef.current.add(achievementKey);
+      setUnlocked((u) => [...u, achievementKey]);
+      setToast(ACHIEVEMENTS[achievementKey]);
     }
   }, []);
 
@@ -62,7 +63,8 @@ export default function Arcade() {
   useEffect(() => {
     let buf = [];
     const onKey = (e) => {
-      buf = [...buf, e.key].slice(-KONAMI.length);
+      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      buf = [...buf, key].slice(-KONAMI.length);
       if (KONAMI.every((k, i) => buf[i] === k)) {
         setGod(true);
         award(500, "konami");
@@ -179,12 +181,14 @@ export default function Arcade() {
 
   /* ---------- GAME WORLD ---------- */
   return (
-    <div
-      ref={rootRef}
-      className={`relative min-h-screen bg-ink-950 ${god ? "god-mode" : ""}`}
-    >
-      {/* HUD */}
-      <div className="hud fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-ink-950/85 backdrop-blur-md">
+    <div ref={rootRef} className="relative min-h-screen bg-ink-950">
+      {/* HUD — god-mode filter applied directly: a filter on an ancestor would
+          re-anchor this fixed element to the page instead of the viewport */}
+      <div
+        className={`hud fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-ink-950/85 backdrop-blur-md ${
+          god ? "god-mode" : ""
+        }`}
+      >
         <div className="container-content flex h-14 items-center justify-between gap-4 font-mono text-xs">
           <Link href="/" className="uppercase tracking-widest text-white/50 hover:text-white">
             ← Quit
@@ -236,6 +240,7 @@ export default function Arcade() {
         </div>
       )}
 
+      <div className={god ? "god-mode" : ""}>
       {/* WORLD INTRO */}
       <section className="scanlines relative overflow-hidden pb-16 pt-36 text-center md:pb-24 md:pt-44">
         <h1 className="world-title font-mono text-4xl font-bold tracking-tight text-white md:text-6xl">
@@ -356,6 +361,7 @@ export default function Arcade() {
           © {new Date().getFullYear()} MC · NO CONTINUES NEEDED
         </p>
       </section>
+      </div>
     </div>
   );
 }

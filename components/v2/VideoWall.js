@@ -99,6 +99,15 @@ export default function VideoWall({ media, accent = "#7c5cff", title = "Inside t
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Silence the wall while the lightbox has the stage
+  useEffect(() => {
+    if (active) {
+      viewportRef.current
+        ?.querySelectorAll("video")
+        .forEach((v) => v.pause());
+    }
+  }, [active]);
+
   const onTileDown = (e) => {
     downRef.current = { x: e.clientX, y: e.clientY };
   };
