@@ -7,8 +7,13 @@ import { InertiaPlugin } from "gsap/InertiaPlugin";
 
 gsap.registerPlugin(Draggable, InertiaPlugin);
 
+// Keep RADIUS well under the perspective distance or near-side tiles
+// blow up into the camera (giant + blurry)
 const RING = 12; // tiles per ring
-const RADIUS = 640; // px from viewer to wall
+const RADIUS = 430; // px from viewer to wall
+const PERSPECTIVE = 1600; // px camera distance
+const TILE_W = 240;
+const TILE_H = 140;
 
 export default function VideoWall({ media, accent = "#7c5cff", title = "Inside the work" }) {
   const viewportRef = useRef(null);
@@ -124,8 +129,8 @@ export default function VideoWall({ media, accent = "#7c5cff", title = "Inside t
       <div
         ref={viewportRef}
         data-cursor="DRAG"
-        className="relative mt-10 h-[68svh] min-h-[420px] w-full select-none overflow-hidden"
-        style={{ perspective: "900px", touchAction: "none" }}
+        className="relative mt-10 h-[60svh] min-h-[400px] w-full select-none overflow-hidden"
+        style={{ perspective: `${PERSPECTIVE}px`, touchAction: "none" }}
       >
         {/* depth fog */}
         <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_42%,#06070a_92%)]" />
@@ -144,10 +149,10 @@ export default function VideoWall({ media, accent = "#7c5cff", title = "Inside t
               onMouseLeave={hoverPause}
               className="group absolute overflow-hidden rounded-lg border border-white/15 bg-ink-900 shadow-[0_0_30px_rgba(0,0,0,0.5)] transition-colors duration-300 hover:border-white/40"
               style={{
-                width: 300,
-                height: 176,
-                marginLeft: -150,
-                marginTop: -88,
+                width: TILE_W,
+                height: TILE_H,
+                marginLeft: -TILE_W / 2,
+                marginTop: -TILE_H / 2,
                 transform: `rotateY(${t.angle}deg) rotateX(${t.tilt}deg) translateZ(-${RADIUS}px) rotateY(180deg)`,
                 backfaceVisibility: "hidden",
               }}
