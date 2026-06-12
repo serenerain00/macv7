@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { projects, experiments } from "@/lib/projects";
+import { projects, experiments, experimentsIntro } from "@/lib/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -302,8 +302,11 @@ export default function Arcade() {
       <section className="bonus-zone border-t border-white/5 py-20">
         <div className="container-content">
           <h2 className="text-center font-mono text-2xl font-bold tracking-tight text-white md:text-3xl">
-            BONUS STAGE: <span className="text-accent-glow">SIDE QUESTS</span>
+            BONUS STAGE: <span className="text-accent-glow">BUILDING THE FUTURE</span>
           </h2>
+          <p className="mx-auto mt-4 max-w-lg text-center font-mono text-sm leading-relaxed text-white/50">
+            {experimentsIntro}
+          </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {experiments.map((x, i) => (
               <div

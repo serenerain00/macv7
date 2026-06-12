@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { projects, tools } from "@/lib/projects";
+import { projects, tools, experiments, experimentsIntro } from "@/lib/projects";
 
 const BOOT_LINES = [
   "MC-OS v7.0 — Creative Technologist Kernel",
@@ -21,6 +21,7 @@ const HELP = [
   ["work", "list the 4 flagship projects"],
   ["open <project>", "open a project, e.g. open arti-wall"],
   ["whoami", "who is Melissa Casole"],
+  ["future", "smaller experiments + internal tools"],
   ["stack", "tools + how each is actually used"],
   ["resume", "open the character sheet / resume"],
   ["contact", "get in touch"],
@@ -29,7 +30,7 @@ const HELP = [
   ["exit", "back to the experience picker"],
 ];
 
-const SUGGESTIONS = ["help", "work", "whoami", "stack", "resume", "contact"];
+const SUGGESTIONS = ["help", "work", "whoami", "future", "stack", "resume", "contact"];
 
 let keySeq = 0;
 const line = (text, cls = "") => ({ id: ++keySeq, text, cls });
@@ -130,6 +131,18 @@ export default function Terminal() {
           line("  stakeholders can see, test, and understand.", "text-white/60"),
           line(""),
           line("  Specs: AI · code · design systems · cognitive psychology", "text-signal"),
+        ]);
+        break;
+
+      case "future":
+      case "experiments":
+        print([
+          line("Building the Future", "text-white"),
+          line(`  ${experimentsIntro}`, "text-white/45"),
+          line(""),
+          ...experiments.map((x) =>
+            line(`  ◆ ${x.title.padEnd(38)} ${x.blurb}`, "text-signal")
+          ),
         ]);
         break;
 

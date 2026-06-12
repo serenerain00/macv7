@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import SmoothScroll from "@/components/v2/SmoothScroll";
-import { projects, tools } from "@/lib/projects";
+import { projects, tools, experiments, experimentsIntro } from "@/lib/projects";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin);
 
@@ -139,6 +139,18 @@ export default function Cinematic() {
             ease: "power2.out",
             scrollTrigger: { trigger: el, start: "top 85%" },
             onUpdate: () => (el.textContent = Math.round(state.v)),
+          });
+        });
+
+        /* ---------- BUILDING THE FUTURE ---------- */
+        gsap.utils.toArray(".future-card").forEach((el, i) => {
+          gsap.from(el, {
+            y: 60,
+            opacity: 0,
+            duration: 0.8,
+            delay: (i % 3) * 0.08,
+            ease: "power3.out",
+            scrollTrigger: { trigger: el, start: "top 88%" },
           });
         });
 
@@ -335,6 +347,41 @@ export default function Cinematic() {
                 </p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* BUILDING THE FUTURE */}
+        <section className="relative border-t border-white/5 py-24 md:py-32">
+          <div className="container-content">
+            <p className="font-mono text-xs uppercase tracking-[0.25em] text-white/35">
+              Building the Future
+            </p>
+            <h2 className="mt-5 max-w-3xl text-balance text-3xl font-medium tracking-[-0.02em] text-white md:text-5xl">
+              Continuous experimentation, not a frozen portfolio.
+            </h2>
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/55">
+              {experimentsIntro}
+            </p>
+
+            <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {experiments.map((x, i) => (
+                <div
+                  key={x.title}
+                  className="future-card group relative overflow-hidden rounded-2xl border border-white/10 bg-ink-850/60 p-7 transition-colors duration-500 hover:border-white/25"
+                >
+                  <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-accent/15 blur-[50px] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <span className="font-mono text-sm text-accent-glow/70">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-4 text-lg font-medium tracking-tight text-white">
+                    {x.title}
+                  </h3>
+                  <p className="mt-2.5 text-sm leading-relaxed text-white/50">
+                    {x.blurb}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
