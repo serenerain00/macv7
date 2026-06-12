@@ -101,6 +101,13 @@ body {
   cursor: none !important;
 }
 
+/* Native cursor zones: video controls and anything marked .native-cursor */
+.has-custom-cursor video,
+.has-custom-cursor .native-cursor,
+.has-custom-cursor .native-cursor * {
+  cursor: auto !important;
+}
+
 /* Hollow display type */
 .text-outline {
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.25);

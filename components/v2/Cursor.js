@@ -36,6 +36,12 @@ export default function Cursor() {
 
     // Grow ring over interactive targets; show label when data-cursor has text
     const over = (e) => {
+      // Hand control back to the native cursor over video controls / opt-out zones
+      if (e.target.closest("video, .native-cursor")) {
+        gsap.to([dot, ring], { autoAlpha: 0, duration: 0.2 });
+        return;
+      }
+      gsap.to([dot, ring], { autoAlpha: 1, duration: 0.2 });
       const t = e.target.closest("[data-cursor], a, button");
       if (!t) return;
       const text = t.getAttribute?.("data-cursor") || "";
