@@ -25,7 +25,7 @@ const browser = await chromium.launch();
 
 async function clip(name, fn) {
   const ctx = await browser.newContext({
-    httpCredentials: { username: "vision", password: "Vision123!" },
+    httpCredentials: { username: process.env.VDS_USER || "vision", password: process.env.VDS_PASS || "" },
     viewport: { width: 1280, height: 720 },
     recordVideo: { dir: OUT, size: { width: 1280, height: 720 } },
   });

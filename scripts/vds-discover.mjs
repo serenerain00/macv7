@@ -2,7 +2,7 @@ import { chromium } from "playwright";
 
 const browser = await chromium.launch();
 const ctx = await browser.newContext({
-  httpCredentials: { username: "vision", password: "Vision123!" },
+  httpCredentials: { username: process.env.VDS_USER || "vision", password: process.env.VDS_PASS || "" },
   viewport: { width: 1440, height: 900 },
 });
 const page = await ctx.newPage();
