@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Melissa Casole — Creative Technologist</title>
+<style>
+  /* Editorial, ATS-friendly. Linear/Vercel/Stripe energy: type does the work. */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @page { size: letter; margin: 0; }
+  :root {
+    --ink: #16181d;
+    --mute: #6b7280;
+    --faint: #9aa1ab;
+    --accent: #6d28d9;
+    --rule: #e5e7eb;
+  }
+  html, body { background: #fff; }
+  body {
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Inter, Arial, sans-serif;
+    color: var(--ink);
+    font-size: 9.5pt;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    width: 8.5in;
+    height: 11in;
+    padding: 0.45in 0.6in;
+    page-break-after: always;
+    display: flex;
+    flex-direction: column;
+  }
+  .page:last-child { page-break-after: avoid; }
+
+  /* ---------- header / hero ---------- */
+  .topline {
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .name { font-size: 15pt; font-weight: 700; letter-spacing: -0.02em; }
+  .role-tag { font-size: 8.5pt; color: var(--mute); letter-spacing: 0.06em; text-transform: uppercase; }
+  .hero {
+    margin-top: 16pt;
+    font-size: 22pt;
+    font-weight: 650;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+  }
+  .hero em { font-style: normal; color: var(--accent); }
+  .support {
+    margin-top: 10pt;
+    font-size: 10.5pt;
+    color: var(--mute);
+    max-width: 5.9in;
+    line-height: 1.5;
+  }
+  .hero-rule { margin: 14pt 0 13pt; border: none; border-top: 1px solid var(--rule); }
+
+  /* ---------- two-column grid ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: 30fr 70fr;
+    column-gap: 0.38in;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .label {
+    font-size: 7pt;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 7pt;
+  }
+  .block { margin-bottom: 12pt; break-inside: avoid; }
+
+  /* left rail */
+  .rail { font-size: 8.8pt; }
+  .rail .item { margin-bottom: 4pt; }
+  .rail a { color: var(--ink); text-decoration: none; }
+  .rail .group { margin-bottom: 8pt; }
+  .rail .group b {
+    display: block; font-size: 7.5pt; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); font-weight: 700;
+    margin-bottom: 2pt;
+  }
+  .rail .group span { color: var(--mute); }
+  .edu b { display: block; font-weight: 650; }
+  .edu span { color: var(--mute); display: block; }
+  ul.plain { list-style: none; }
+  ul.plain li { margin-bottom: 4pt; color: var(--mute); }
+  ul.plain li::before { content: "—"; color: var(--accent); margin-right: 5pt; }
+
+  /* main column */
+  .summary { font-size: 10pt; line-height: 1.55; }
+
+  .feat { padding: 7pt 0; border-top: 1px solid var(--rule); break-inside: avoid; }
+  .feat:first-of-type { border-top: none; padding-top: 0; }
+  .feat-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .feat-head b { font-size: 10.5pt; font-weight: 700; letter-spacing: -0.01em; }
+  .feat-head span { font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.1em; color: var(--faint); }
+  .feat p { margin-top: 2.5pt; color: var(--mute); }
+  .feat .outcome { color: var(--ink); margin-top: 2pt; }
+  .feat .outcome b { color: var(--accent); font-weight: 700; }
+
+  /* key achievement */
+  .key {
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 4pt;
+    padding: 8pt 11pt;
+    break-inside: avoid;
+  }
+  .key h3 { font-size: 10.5pt; font-weight: 700; letter-spacing: -0.01em; }
+  .key p { margin-top: 3pt; color: var(--mute); }
+  .pipeline { margin-top: 7pt; font-size: 8pt; color: var(--ink); line-height: 1.7; }
+  .pipeline b { color: var(--accent); font-weight: 400; }
+
+  /* experience */
+  .job { margin-bottom: 9pt; break-inside: avoid; }
+  .job-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .job-head b { font-size: 10pt; font-weight: 700; }
+  .job-head span { font-size: 8pt; color: var(--faint); white-space: nowrap; }
+  .job .org { font-size: 8.5pt; color: var(--accent); margin-top: 1pt; }
+  .job ul { margin-top: 3pt; padding-left: 11pt; }
+  .job li { margin-bottom: 2pt; color: var(--mute); font-size: 9pt; line-height: 1.4; }
+  .job .oneline { margin-top: 2pt; color: var(--mute); font-size: 9pt; line-height: 1.4; }
+
+  .foot {
+    margin-top: auto;
+    padding-top: 10pt;
+    border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between;
+    font-size: 7.5pt; color: var(--faint);
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1 ================= -->
+<div class="page">
+  <div class="topline">
+    <div class="name">Melissa Casole</div>
+    <div class="role-tag">Creative Technologist · AI Product Designer</div>
+  </div>
+
+  <div class="hero">When ideas are difficult to explain,<br /><em>I build them.</em></div>
+  <p class="support">
+    Creative Technologist and Product Designer leveraging AI, code, design systems,
+    and cognitive psychology to transform emerging concepts into tangible product experiences.
+  </p>
+
+  <hr class="hero-rule" />
+
+  <div class="grid">
+    <!-- LEFT RAIL -->
+    <div class="rail">
+      <div class="block">
+        <div class="label">Contact</div>
+        <div class="item">Bradenton, FL</div>
+        <div class="item"><a href="mailto:melissa.casole@yahoo.com">melissa.casole@yahoo.com</a></div>
+        <div class="item">618-795-4580</div>
+        <div class="item"><a href="https://www.melissacasole.com">www.melissacasole.com</a></div>
+        <div class="item"><a href="https://www.linkedin.com/in/melissacasole">linkedin.com/in/melissacasole</a></div>
+      </div>
+
+      <div class="block">
+        <div class="label">Focus</div>
+        <ul class="plain">
+          <li>AI Product Design</li>
+          <li>Interactive Prototyping</li>
+          <li>Design Systems as Platforms</li>
+          <li>Hardware + Software UX</li>
+          <li>Healthcare &amp; Med-Device</li>
+          <li>Cognitive Psychology</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="label">Technology</div>
+        <div class="group"><b>AI</b><span>Claude Code · Cursor · ChatGPT · Gemini · ElevenLabs</span></div>
+        <div class="group"><b>Design</b><span>Figma · ProtoPie · FigJam</span></div>
+        <div class="group"><b>Development</b><span>Vercel · GitLab · HTML · CSS · JavaScript · Arduino C++</span></div>
+        <div class="group"><b>Systems</b><span>Design Tokens · Storybook · Component Architecture</span></div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="block">
+        <div class="label">Profile</div>
+        <p class="summary">
+          I reduce uncertainty by building realistic experiences stakeholders can see, test,
+          and understand — working software over static mockups, demonstrations over decks.
+          My work spans AI-powered clinical platforms, physical hardware prototypes, design
+          systems built as product platforms, and founder-built tools. I don't wait for the
+          future to arrive. I prototype it.
+        </p>
+      </div>
+
+      <div class="block">
+        <div class="label">Featured Work</div>
+
+        <div class="feat">
+          <div class="feat-head"><b>Arti Wall</b><span>AI-Powered Operating Room Intelligence</span></div>
+          <p>Transformed a leadership vision into a living product experience: an ambient OR
+             intelligence platform with LLM-powered voice interaction, designed around four
+             clinical personas and demonstrated to executives, engineers, and surgeons.</p>
+          <p class="outcome"><b>→</b> Funded roadmap initiative targeting MVP release in 2027.</p>
+        </div>
+
+        <div class="feat">
+          <div class="feat-head"><b>Horizon Control</b><span>Hardware + Software Interaction Design</span></div>
+          <p>Screen prototypes couldn't simulate surgery — so I built a 3D-printed surgical
+             camera wired to Arduino with AI-generated C++, driving tablet and HUD interfaces
+             in real time through ProtoPie Connect for surgeon testing.</p>
+          <p class="outcome"><b>→</b> Validated four interaction models; influenced future Vision platform direction.</p>
+        </div>
+
+        <div class="feat">
+          <div class="feat-head"><b>Vision Design System</b><span>Design Systems as Product Platforms</span></div>
+          <p>Unified independently evolving surgical products (CCU, Trident, GX) under one
+             foundation: Figma Variables and design tokens migrated into a Vuetify
+             implementation, with an interactive documentation platform covering motion,
+             elevation, and behavior.</p>
+          <p class="outcome"><b>→</b> Scalable foundation and governance model for future Vision products.</p>
+        </div>
+
+        <div class="feat">
+          <div class="feat-head"><b>ProtoCue &nbsp;·&nbsp; Founder</b><span>Building the Tool I Needed</span></div>
+          <p>AI-generated coded prototypes broke traditional review workflows, so I designed,
+             built, and shipped the solution: contextual feedback attached directly to live
+             interactive experiences. Built end-to-end with Claude Code, Cursor, GitLab, and Vercel.</p>
+          <p class="outcome"><b>→</b> Working product, actively evolving for AI-first product teams.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Melissa Casole — Creative Technologist</span>
+    <span>www.melissacasole.com · Page 1 of 2</span>
+  </div>
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="page">
+  <div class="grid" style="margin-top: 4pt;">
+    <!-- LEFT RAIL -->
+    <div class="rail">
+      <div class="block">
+        <div class="label">Industries</div>
+        <ul class="plain">
+          <li>Healthcare AI</li>
+          <li>Medical Devices</li>
+          <li>Enterprise SaaS</li>
+          <li>Retail</li>
+        </ul>
+      </div>
+
+      <div class="block edu">
+        <div class="label">Education</div>
+        <b>B.S. Computer Science &amp; Design</b>
+        <span>Missouri College, 2007</span>
+        <span>Minor: Cognitive Psychology</span>
+      </div>
+
+      <div class="block">
+        <div class="label">Certifications</div>
+        <ul class="plain">
+          <li>Human Factors for Medical Devices — AAMI, 2024</li>
+          <li>UX Design Certification — Google, 2020</li>
+          <li>Human-Computer Interaction — MIT, 2019</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="label">Independent Products</div>
+        <div class="group"><b>ProtoCue</b><span>Contextual feedback on live interactive experiences.</span></div>
+        <div class="group"><b>AI Meeting Intelligence</b><span>Captures meetings, summarizes, extracts action items.</span></div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="block key">
+        <div class="label" style="color: var(--accent);">Key Achievement</div>
+        <h3>Code-First Product Validation</h3>
+        <p>Pulled production design-system components into AI-assisted development workflows,
+           letting teams validate production-accurate experiences before engineering investment.</p>
+        <p class="pipeline">Figma <b>→</b> Claude Code <b>→</b> Production Components <b>→</b> Vercel
+           <b>→</b> MS Clarity / Hotjar <b>→</b> User Testing <b>→</b> Engineering</p>
+      </div>
+
+      <div class="block">
+        <div class="label">Professional Experience</div>
+
+        <div class="job">
+          <div class="job-head"><b>Creative Technologist · Product Design Consultant</b><span>2023 – Present</span></div>
+          <div class="org">Arthrex</div>
+          <ul>
+            <li>Transformed leadership's operating-room vision into Arti Wall, an AI voice + LLM product experience that aligned executives, engineers, PMs, and clinicians — now a funded roadmap initiative (MVP 2027).</li>
+            <li>Built Horizon Control, a physical Arduino prototype with AI-generated C++ and ProtoPie Connect, validating four interaction models in surgeon testing.</li>
+            <li>Created the Vision Design System — Figma Variables, design tokens, and a Vuetify implementation — as the platform for future Vision products.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head"><b>Sr Designer &amp; UX Manager</b><span>Sept 2020 – Present</span></div>
+          <div class="org">First Advantage</div>
+          <ul>
+            <li>Created and evolved the ELEMENTS design system (v2 → v3): 150+ components aligned across React, Angular, Vue, and Web — 30% less UI debt, 40% less design-to-dev rework.</li>
+            <li>Pioneered code-first product validation: production components in AI-assisted workflows, validated on Vercel with MS Clarity/Hotjar before engineering investment.</li>
+            <li>Increased sprint velocity 25% with AI-assisted prototyping; raised accessibility scores 78% → 96%; mentored a UX team of 6 with 100% retention.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head"><b>Contract Senior UX Designer</b><span>Mar 2020 – Sept 2020</span></div>
+          <div class="org">Motivus (formerly AgileThought)</div>
+          <p class="oneline">Figma/ProtoPie prototypes cut stakeholder approval cycles 35%; journey mapping drove a redesign reducing task time 22%.</p>
+        </div>
+
+        <div class="job">
+          <div class="job-head"><b>UX Engineer</b><span>Oct 2018 – Mar 2020</span></div>
+          <div class="org">Mediagistic</div>
+          <p class="oneline">Designed an AI/ML-driven ad delivery platform (+18% CTR, −12% spend waste); built front-end prototypes saving 10+ dev hours per sprint.</p>
+        </div>
+
+        <div class="job">
+          <div class="job-head"><b>Senior UX Designer</b><span>May 2017 – Oct 2018</span></div>
+          <div class="org">Inspirata</div>
+          <p class="oneline">Co-designed digital cancer diagnostics — 30% faster pathologist workflows; usability testing with 50+ pathologists informed FDA submission readiness.</p>
+        </div>
+
+        <div class="job">
+          <div class="job-head"><b>Lead UX Designer</b><span>Jun 2016 – May 2017</span></div>
+          <div class="org">MarineMax</div>
+          <p class="oneline">Created the company's first design system; POS software adopted by 100+ retail locations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>I don't wait for the future to arrive — I prototype it.</span>
+    <span>www.melissacasole.com · Page 2 of 2</span>
+  </div>
+</div>
+
+</body>
+</html>
