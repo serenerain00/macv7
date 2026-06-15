@@ -37,7 +37,12 @@
     display: flex; justify-content: space-between; align-items: baseline;
   }
   .name { font-size: 15pt; font-weight: 700; letter-spacing: -0.02em; }
+  .topline-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3pt; }
   .role-tag { font-size: 8.5pt; color: var(--mute); letter-spacing: 0.06em; text-transform: uppercase; }
+  .site-link {
+    font-size: 11pt; font-weight: 700; letter-spacing: -0.01em;
+    color: var(--accent); text-decoration: none;
+  }
   .hero {
     margin-top: 16pt;
     font-size: 22pt;
@@ -78,6 +83,9 @@
   .rail { font-size: 8.8pt; }
   .rail .item { margin-bottom: 4pt; }
   .rail a { color: var(--ink); text-decoration: none; }
+  .rail a.site { color: var(--accent); font-weight: 700; }
+  .rail .pw { font-size: 7.8pt; color: var(--mute); letter-spacing: 0.02em; margin-top: 1.5pt; }
+  .rail .pw b { color: var(--ink); font-weight: 600; }
   .rail .group { margin-bottom: 8pt; }
   .rail .group b {
     display: block; font-size: 7.5pt; letter-spacing: 0.1em;
@@ -142,7 +150,10 @@
 <div class="page">
   <div class="topline">
     <div class="name">Melissa Casole</div>
-    <div class="role-tag">Creative Technologist · AI Product Designer</div>
+    <div class="topline-right">
+      <div class="role-tag">Creative Technologist · AI Product Designer</div>
+      <a class="site-link" href="https://www.melissacasole.com">www.melissacasole.com</a>
+    </div>
   </div>
 
   <div class="hero">When ideas are difficult to explain,<br /><em>I build them.</em></div>
@@ -161,7 +172,8 @@
         <div class="item">Bradenton, FL</div>
         <div class="item"><a href="mailto:melissa.casole@yahoo.com">melissa.casole@yahoo.com</a></div>
         <div class="item">618-795-4580</div>
-        <div class="item"><a href="https://www.melissacasole.com">www.melissacasole.com</a></div>
+        <div class="item"><a class="site" href="https://www.melissacasole.com">www.melissacasole.com</a></div>
+        <div class="pw">Portfolio access: <b>MelissaAI123!</b></div>
         <div class="item"><a href="https://www.linkedin.com/in/melissacasole">linkedin.com/in/melissacasole</a></div>
       </div>
 
